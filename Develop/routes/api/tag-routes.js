@@ -2,14 +2,8 @@ const router = require('express').Router();
 const { Tag, Product, ProductTag } = require('../../models');
 
 // The `/api/tags` endpoint
-
-
-
-
-
- // find all tags
+// find all tags
   // be sure to include its associated Product data
-
 router.get('/',async (req, res) => {
   try {
     const tags = await Tag.findAll({
@@ -21,28 +15,49 @@ router.get('/',async (req, res) => {
  });
 
 
-
-
-
-
-
   // find a single tag by its `id`
   // be sure to include its associated Product data
   router.get('/:id',async (req, res) => {
+    try {
+      const tag = await Tag.findByPk(req.params.id, {
+        // Add Book as a second model to JOIN with
+        include: [{ model: Product }],
+      });
+  
+      if (!tag) {
+        res.status(404).json({ message: 'No reader found with that id!' });
+        return;
+      }
+  
+      res.status(200).json(tag);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+  
+    //   try{
+  // const tag = await Tag.findByPk(rer.params.id, {
+  //   include: [{model:Product}]
+  // });
+  
+  // if (!tag) {
+  //   res.status(404).json({ message: 'No reader found with that id!' });
+  //   return;
+  // }
+/////******************note reminder tag add is not singling out the chosen id */
+    // const {id} = req.params
+  // try {
+  //   const tag = await Tag.findByPk({
+  //     where: {id},
+     
+    
+//   res.status(200).json(tag)
 
-const {id} = req.params
-  try {
-    const tag = await Category.findAll({
-      where:{id},
-      include:[{model:Product}]
-    })
-  res.status(200).json(tag)
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
 
-  } catch (err) {
-    res.status(500).json(err);
-  }
-
-});
+// });
 
 
 
@@ -50,7 +65,7 @@ const {id} = req.params
   // create a new tag
 router.post('/',async (req, res) => {
   try {
-    const newCategory = await Reader.create(req.body);
+    const newCategory = await Tag.create(req.body);
     res.status(200).json(newCategory);
   } catch (err) {
     res.status(400).json(err);
@@ -68,7 +83,7 @@ router.put('/:id',async (req, res) => {
 
   const {id} = req.params
   try {
-    const updateTag = await Category.create({
+    const updateTag = await Tag.create({
       where:{id}
     });
 
@@ -88,7 +103,7 @@ router.put('/:id',async (req, res) => {
 router.delete('/:id',async (req, res) => {
   const {id} = req.params
   try {
-    const dltTag = await Category.destroy({
+    const dltTag = await Tag.destroy({
       where:{id}
     });
 
