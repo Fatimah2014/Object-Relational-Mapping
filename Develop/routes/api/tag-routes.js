@@ -35,31 +35,6 @@ router.get('/',async (req, res) => {
     }
   });
   
-    //   try{
-  // const tag = await Tag.findByPk(rer.params.id, {
-  //   include: [{model:Product}]
-  // });
-  
-  // if (!tag) {
-  //   res.status(404).json({ message: 'No reader found with that id!' });
-  //   return;
-  // }
-/////******************note reminder tag add is not singling out the chosen id */
-    // const {id} = req.params
-  // try {
-  //   const tag = await Tag.findByPk({
-  //     where: {id},
-     
-    
-//   res.status(200).json(tag)
-
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-
-// });
-
-
 
 
   // create a new tag
@@ -73,28 +48,19 @@ router.post('/',async (req, res) => {
 });
 
 
-
-
-
-
-
   // update a tag's name by its `id` value
 router.put('/:id',async (req, res) => {
   console.log('REQUEST!! ', req.body)
   const {id} = req.params
   try {
-    const updateTag = await Tag.update({tag_name: req.body.tag_name },{ where: {id}});
+    const updateTag = await Tag.update({tag_name: req.body.tag_name },
+      { where: {id}});
 
     res.status(200).json(updateTag);
   } catch (err) {
     res.status(400).json(err);
   }
 });
-
-
-
-
-
 
 
   // delete on tag by its `id` value
